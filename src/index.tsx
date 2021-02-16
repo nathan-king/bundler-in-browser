@@ -1,7 +1,7 @@
 import * as esbuild from "esbuild-wasm";
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-
+import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
 const App: React.FC = () => {
     const ref = useRef<any>();
@@ -9,7 +9,7 @@ const App: React.FC = () => {
     const [code, setCode] = useState('');
 
     const startService = async () => {
-        // Assign ref to service
+        // Assign ref to service to access throughout component
         ref.current = await esbuild.startService({
             worker: true,
             wasmURL: "/esbuild.wasm"
@@ -21,18 +21,25 @@ const App: React.FC = () => {
     }, []);
 
     const onClick = async () => {
+        // Check if ref.current is defined
         if (!ref.current) {
             return;
         }
 
-        const result = await ref.current.transform(input, {
-            loader: "jsx",
-            target: "es2015"
-        });
+        const result = await ref.current.build({
+            entryPoints: ['index.js'],
+            bundle: true,
+            write: false,
+            plugins: [unpkgPathPlugin()]
+        })
 
-        setCode(result.code);
+        // ## Transpilation ##
+        // const result = await ref.current.transform(input, {
+        //     loader: "jsx",
+        //     target: "es2015"
+        // });
 
-        console.log(result);
+        setCode(result.outputFiles[0].text); // set code to the resulting code from the input
     };
 
     return (
