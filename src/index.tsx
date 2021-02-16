@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+
 const App: React.FC = () => {
     const [input, setInput] = useState('');
     const [code, setCode] = useState('');
