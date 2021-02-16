@@ -9,6 +9,7 @@ const App: React.FC = () => {
     const [code, setCode] = useState('');
 
     const startService = async () => {
+        // Assign ref to service
         ref.current = await esbuild.startService({
             worker: true,
             wasmURL: "/esbuild.wasm"
@@ -19,12 +20,19 @@ const App: React.FC = () => {
         startService();
     }, []);
 
-    const onClick = () => {
+    const onClick = async () => {
         if (!ref.current) {
             return;
         }
 
-        console.log(ref.current);
+        const result = await ref.current.transform(input, {
+            loader: "jsx",
+            target: "es2015"
+        });
+
+        setCode(result.code);
+
+        console.log(result);
     };
 
     return (
