@@ -2,6 +2,7 @@ import * as esbuild from "esbuild-wasm";
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
+import { fetchPlugin } from "./plugins/fetch-pluigin";
 
 const App: React.FC = () => {
     const ref = useRef<any>();
@@ -30,12 +31,17 @@ const App: React.FC = () => {
             entryPoints: ['index.js'],
             bundle: true,
             write: false,
-            plugins: [unpkgPathPlugin(input)],
+            plugins: [
+                unpkgPathPlugin(),
+                fetchPlugin(input),
+            ],
             define: {
                 'process.env.NODE_ENV': '"production"',
                 global: 'window',
             }
         });
+
+        
 
         // ## Transpilation ##
         // const result = await ref.current.transform(input, {
