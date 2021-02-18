@@ -17,7 +17,6 @@ export const unpkgPathPlugin = (inputCode: string) => {
           };
       });
 
-
       build.onResolve({ filter: /.*/ }, async (args: any) => {
         return {
             namespace: 'a',
