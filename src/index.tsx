@@ -38,13 +38,6 @@ const App: React.FC = () => {
       },
     });
 
-    // ## Transpilation ##
-    // const result = await ref.current.transform(input, {
-    //     loader: "jsx",
-    //     target: "es2015"
-    // });
-    // setCode(result.code);
-
     setCode(result.outputFiles[0].text); // set code to the resulting code from the input
   };
 
